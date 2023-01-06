@@ -10,7 +10,7 @@
 
 	<groupId>com.springframework</groupId>
 	<artifactId>springboot-pet-clinic</artifactId>
-	<version>0.0.4-SNAPSHOT</version>
+	<version>0.0.4</version>
 	<packaging>pom</packaging>
 	<name>springboot-pet-clinic</name>
 	<description>springboot-pet-clinic</description>
@@ -48,7 +48,7 @@
 
 	<scm>
 		<developerConnection>scm:git:https://github.com/DevDPM/springboot-pet-clinic.git</developerConnection>
-	  <tag>HEAD</tag>
+	  <tag>springboot-pet-clinic-0.0.4</tag>
   </scm>
 
 </project>
