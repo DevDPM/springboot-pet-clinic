@@ -25,7 +25,6 @@ public class Pet extends NameEntity{
     private LocalDate birthDate;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "pet")
-    @JoinColumn(name = "visit_id")
     private Set<Visit> visits = new HashSet<>();
 
     public PetType getPetType() {
