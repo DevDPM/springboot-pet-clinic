@@ -1,4 +1,4 @@
-package com.springframework.springbootpetclinic.services;
+package com.springframework.springbootpetclinic.service;
 
 import java.util.Set;
 

@@ -1,10 +1,9 @@
-package com.springframework.springbootpetclinic.services.map;
+package com.springframework.springbootpetclinic.service.map;
 
 import com.springframework.springbootpetclinic.model.Specialty;
 import com.springframework.springbootpetclinic.model.Vet;
-import com.springframework.springbootpetclinic.services.CrudService;
-import com.springframework.springbootpetclinic.services.SpecialtyService;
-import com.springframework.springbootpetclinic.services.VetService;
+import com.springframework.springbootpetclinic.service.SpecialtyService;
+import com.springframework.springbootpetclinic.service.VetService;
 import org.springframework.stereotype.Service;
 
 import java.util.Set;
