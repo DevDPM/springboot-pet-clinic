@@ -6,6 +6,7 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
+import java.time.Month;
 
 @Component
 public class DataLoader implements CommandLineRunner {
@@ -114,5 +115,27 @@ public class DataLoader implements CommandLineRunner {
         vetService.save(vet2);
 
         System.out.println("Loaded Vets....");
+
+        // ----------------------------------------------------
+        Visit visit1 = new Visit();
+        visit1.setDescription("Looks good");
+        visit1.setDate(LocalDate.now());
+        visit1.setPet(pet1);
+
+        Visit visit2 = new Visit();
+        visit2.setDescription("Broken leg");
+        visit2.setDate(LocalDate.of(2022, 11, 10));
+        visit2.setPet(pet1);
+
+        Visit visit3 = new Visit();
+        visit3.setDescription("Was in a fight with another pet");
+        visit3.setDate(LocalDate.of(2023, Month.JANUARY, 17));
+        visit3.setPet(pet2);
+
+        Visit visit4 = new Visit();
+        visit4.setDescription("Pet recovered");
+        visit4.setDate(LocalDate.of(2023, Month.JANUARY, 24));
+        visit4.setPet(pet2);
+        System.out.println("Visits loaded....");
     }
 }
