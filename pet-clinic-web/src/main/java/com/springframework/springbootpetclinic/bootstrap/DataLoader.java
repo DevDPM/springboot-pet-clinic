@@ -121,21 +121,25 @@ public class DataLoader implements CommandLineRunner {
         visit1.setDescription("Looks good");
         visit1.setDate(LocalDate.now());
         visit1.setPet(pet1);
+        visitService.save(visit1);
 
         Visit visit2 = new Visit();
         visit2.setDescription("Broken leg");
         visit2.setDate(LocalDate.of(2022, 11, 10));
         visit2.setPet(pet1);
+        visitService.save(visit2);
 
         Visit visit3 = new Visit();
         visit3.setDescription("Was in a fight with another pet");
         visit3.setDate(LocalDate.of(2023, Month.JANUARY, 17));
         visit3.setPet(pet2);
+        visitService.save(visit3);
 
         Visit visit4 = new Visit();
         visit4.setDescription("Pet recovered");
         visit4.setDate(LocalDate.of(2023, Month.JANUARY, 24));
         visit4.setPet(pet2);
+        visitService.save(visit4);
         System.out.println("Visits loaded....");
     }
 }
