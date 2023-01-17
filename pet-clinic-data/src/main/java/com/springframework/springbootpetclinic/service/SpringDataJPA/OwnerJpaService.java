@@ -16,6 +16,11 @@ public class OwnerJpaService implements OwnerService {
     private final OwnerRepository ownerRepository;
 
     public OwnerJpaService(OwnerRepository ownerRepository) {
+
+
+        System.out.println("$(OwnerJpaService): ###########   JPA profile active ###########");
+
+
         this.ownerRepository = ownerRepository;
     }
 
