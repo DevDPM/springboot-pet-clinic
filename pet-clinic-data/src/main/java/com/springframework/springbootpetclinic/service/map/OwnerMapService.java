@@ -9,6 +9,7 @@ import com.springframework.springbootpetclinic.service.PetTypeService;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 
+import java.util.HashSet;
 import java.util.Set;
 
 @Service
@@ -91,8 +92,12 @@ public class OwnerMapService extends AbstractMapService<Owner, Long> implements 
     }
 
     @Override
-    public Owner findByLastName(String lastName) {
-        // TO-DO
-        return null;
+    public Set<Owner> findByLastName(String lastName) {
+        Set<Owner> ownerListByLastName = new HashSet<>();
+        this.findAll().forEach(owner -> {
+            if (owner.getLastName().equals(lastName))
+                ownerListByLastName.add(owner);
+        });
+        return ownerListByLastName.size() > 0 ? ownerListByLastName : null;
     }
 }
