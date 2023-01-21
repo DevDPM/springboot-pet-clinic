@@ -30,7 +30,7 @@ public class OwnerJpaService implements OwnerService {
         ownerRepository.findAll().forEach(owner -> {
             owners.add(owner);
         });
-        return owners;
+        return owners.size() > 0 ? owners : null;
     }
 
     @Override
@@ -61,6 +61,6 @@ public class OwnerJpaService implements OwnerService {
             if (owner.getLastName().equals(lastName))
                 ownerListByLastName.add(owner);
         });
-        return ownerListByLastName;
+        return ownerListByLastName.size() > 0 ? ownerListByLastName : null;
     }
 }
