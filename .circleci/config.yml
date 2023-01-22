@@ -21,6 +21,21 @@
       steps:
         - checkout
 
+        - restore_cache:
+            keys:
+            - v1-dependencies-{{ checksum "pom.xml" }}
+            - v1-dependencies-
+
+        - run: mvn install -DskipTests
+
+        - run: mvn dependency:go-offline
+
+        - save_cache:
+              paths:
+              - ~/.m2
+              key: v1-dependencies-{{ checksum "pom.xml" }}
+
+        - run: mvn integration-test
 
   # Invoke jobs via workflows
   # See: https://circleci.com/docs/2.0/configuration-reference/#workflows
