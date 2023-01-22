@@ -32,7 +32,7 @@ class OwnerMapServiceTest {
     void findAll() {
         Set<Owner> ownerSet = ownerMapService.findAll();
 
-        assertEquals(1, ownerSet.size());
+        assertEquals(3, ownerSet.size());
     }
 
     @Test
@@ -79,6 +79,8 @@ class OwnerMapServiceTest {
     void findOneByLastName() {
         Set<Owner> mockOwnersByLastName = new HashSet<>();
         mockOwnersByLastName.add(owner);
+        mockOwnersByLastName.add(addOwner1);
+        mockOwnersByLastName.add(addOwner2);
         Set<Owner> foundOwnersByLastName = ownerMapService.findByLastName(lastName);
 
         assertEquals(mockOwnersByLastName, foundOwnersByLastName);

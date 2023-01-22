@@ -20,11 +20,6 @@ public class OwnerMapService extends AbstractMapService<Owner, Long> implements 
     private final PetService petService;
 
     public OwnerMapService(PetTypeService petTypeService, PetService petService) {
-
-
-        System.out.println("$(OwnerMapService): ###########   MAP profile active ###########");
-
-
         this.petTypeService = petTypeService;
         this.petService = petService;
     }
