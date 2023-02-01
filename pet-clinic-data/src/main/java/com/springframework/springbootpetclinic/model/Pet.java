@@ -25,7 +25,9 @@ public class Pet extends NameEntity{
         this.petType = petType;
         this.owner = owner;
         this.birthDate = birthDate;
-        this.visits = visits;
+        if (visits == null || visits.size() > 0) {
+            this.visits = new HashSet<>();
+        }
     }
 
     @ManyToOne
