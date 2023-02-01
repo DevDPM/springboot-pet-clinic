@@ -1,14 +1,17 @@
 package com.springframework.springbootpetclinic.controllers;
 
 import com.springframework.springbootpetclinic.model.Owner;
+import com.springframework.springbootpetclinic.model.Pet;
 import com.springframework.springbootpetclinic.model.PetType;
 import com.springframework.springbootpetclinic.service.OwnerService;
 import com.springframework.springbootpetclinic.service.PetService;
 import com.springframework.springbootpetclinic.service.PetTypeService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
@@ -23,6 +26,7 @@ import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+@ExtendWith(MockitoExtension.class)
 class PetControllerTest {
 
     @Mock
@@ -61,7 +65,7 @@ class PetControllerTest {
         mockMvc.perform(MockMvcRequestBuilders.get("/owners/1/pets/new"))
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.model().attributeExists("owner","pet"))
-                .andExpect(MockMvcResultMatchers.view().name("pet/createOrUpdatePetForm"));
+                .andExpect(MockMvcResultMatchers.view().name("pets/createOrUpdatePetForm"));
     }
 
     @Test
@@ -69,22 +73,49 @@ class PetControllerTest {
         when(ownerService.findById(anyLong())).thenReturn(owner);
         when(petTypeService.findAll()).thenReturn(petType);
 
-        mockMvc.perform(MockMvcRequestBuilders.get("/owners/1/pets/new"))
-                .andExpect(MockMvcResultMatchers.status().isOk())
+        mockMvc.perform(MockMvcRequestBuilders.post("/owners/1/pets/new"))
+                .andExpect(MockMvcResultMatchers.status().is3xxRedirection())
                 .andExpect(MockMvcResultMatchers.view().name("redirect:/owners/1"));
 
         verify(petService).save(any());
     }
 
+    @Test
+    void initUpdateForm() throws Exception {
+        when(ownerService.findById(anyLong())).thenReturn(owner);
+        when(petTypeService.findAll()).thenReturn(petType);
+        when(petService.findById(anyLong())).thenReturn(Pet.builder().id(1L).build());
 
+        mockMvc.perform(MockMvcRequestBuilders.get("/owners/1/pets/1/edit"))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.model().attributeExists("pet"))
+                .andExpect(MockMvcResultMatchers.view().name("pets/createOrUpdatePetForm"));
+    }
 
+    @Test
+    void processUpdateForm() throws Exception {
+        when(ownerService.findById(anyLong())).thenReturn(owner);
+        when(petTypeService.findAll()).thenReturn(petType);
 
+        mockMvc.perform(MockMvcRequestBuilders.post("/owners/1/pets/1/edit"))
+                .andExpect(MockMvcResultMatchers.status().is3xxRedirection())
+                .andExpect(MockMvcResultMatchers.view().name("redirect:/owners/1"));
 
+        verify(petService).save(any());
+    }
 
+    @Test
+    void populatePetTypes() {
+        //todo impl
+    }
 
+    @Test
+    void findOwner() {
+        //todo impl
+    }
 
-
-
-
-
+    @Test
+    void initOwnerBinder() {
+        //todo impl
+    }
 }

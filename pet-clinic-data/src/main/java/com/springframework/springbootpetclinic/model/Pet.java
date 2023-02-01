@@ -9,15 +9,24 @@ import java.util.Set;
 
 @Setter
 @Getter
+@Entity
 @AllArgsConstructor
 @NoArgsConstructor
-@Builder
-@Entity
 @Table(name = "pets")
 public class Pet extends NameEntity{
 
     @Column (name = "name")
     private String name;
+
+    @Builder
+    public Pet(Long id, String name, String name1, PetType petType, Owner owner, LocalDate birthDate, Set<Visit> visits) {
+        super(id, name);
+        this.name = name1;
+        this.petType = petType;
+        this.owner = owner;
+        this.birthDate = birthDate;
+        this.visits = visits;
+    }
 
     @ManyToOne
     @JoinColumn(name = "type_id")
