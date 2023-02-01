@@ -7,7 +7,10 @@ import com.springframework.springbootpetclinic.service.OwnerService;
 import com.springframework.springbootpetclinic.service.PetService;
 import com.springframework.springbootpetclinic.service.PetTypeService;
 import jakarta.validation.Valid;
+import org.hibernate.Session;
+import org.springframework.data.jpa.provider.HibernateUtils;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
@@ -15,6 +18,10 @@ import org.springframework.web.bind.annotation.*;
 import org.thymeleaf.util.StringUtils;
 
 import java.util.Collection;
+import java.util.List;
+import java.util.stream.Collectors;
+
+import static java.util.stream.Collectors.toList;
 
 @Controller
 @RequestMapping("/owners/{ownerId}")
@@ -47,16 +54,20 @@ public class PetController {
     }
 
     @GetMapping("/pets/new")
-    public String initCreationForm(Owner owner, Model model) {
+    public String initCreationForm(Owner owner,
+                                   Model model) {
         Pet pet = new Pet();
-//        owner.getPets().add(pet);
-//        pet.setOwner(owner);
+        pet.setOwner(owner);
+        owner.getPets().add(pet);
         model.addAttribute("pet", pet);
         return VIEW_PETS_CREATE_OR_UPDATE;
     }
 
     @PostMapping("/pets/new")
-    public String processCreationForm(Owner owner, @Valid Pet pet, BindingResult result, Model model) {
+    public String processCreationForm(Owner owner,
+                                      @Valid Pet pet,
+                                      BindingResult result,
+                                      Model model) {
         if (!StringUtils.isEmpty(pet.getName()) && pet.isNew() && owner.getPet(pet.getName(), true) != null) {
             result.rejectValue("name", "duplicate", "already exists");
         }
@@ -72,15 +83,17 @@ public class PetController {
     }
 
     @GetMapping("/pets/{petId}/edit")
-    public String initUpdateForm(@PathVariable("petId") Long petId, Model model) {
+    public String initUpdateForm(@PathVariable("petId") Long petId,
+                                 Owner owner,
+                                 Model model) {
         Pet pet = petService.findById(petId);
+
         model.addAttribute("pet", pet);
         return VIEW_PETS_CREATE_OR_UPDATE;
     }
 
     @PostMapping("/pets/{petId}/edit")
     public String processUpdateForm(@Valid Pet pet,
-                                    @PathVariable("petId") Long petId,
                                     BindingResult result,
                                     Owner owner,
                                     Model model) {
@@ -91,19 +104,21 @@ public class PetController {
             model.addAttribute("pet", pet);
             return  VIEW_PETS_CREATE_OR_UPDATE;
         } else {
-            owner.getPets().add(pet);
-            petService.save(pet);
+            List<Pet> ownerPet = owner.getPets().stream()
+                    .filter(e -> e.getId().equals(pet.getId()))
+                    .toList();
+
+            if (ownerPet.isEmpty())
+                throw new RuntimeException("error");
+
+            Pet convertPet = ownerPet.get(0);
+            convertPet.setBirthDate(pet.getBirthDate());
+            convertPet.setVisits(pet.getVisits());
+            convertPet.setPetType(pet.getPetType());
+            convertPet.setName(pet.getName());
+
+            ownerService.save(owner);
             return "redirect:/owners/" + owner.getId();
         }
     }
-
-
-
-
-
-
-
-
-
-
 }

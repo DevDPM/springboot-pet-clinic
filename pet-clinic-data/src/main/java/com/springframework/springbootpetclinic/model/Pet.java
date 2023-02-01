@@ -2,6 +2,7 @@ package com.springframework.springbootpetclinic.model;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.HashSet;
