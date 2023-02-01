@@ -49,17 +49,18 @@ public class PetController {
     @GetMapping("/pets/new")
     public String initCreationForm(Owner owner, Model model) {
         Pet pet = new Pet();
-        owner.getPets().add(pet);
-        pet.setOwner(owner);
+//        owner.getPets().add(pet);
+//        pet.setOwner(owner);
         model.addAttribute("pet", pet);
         return VIEW_PETS_CREATE_OR_UPDATE;
     }
 
     @PostMapping("/pets/new")
-    public String processCreationForm(@ModelAttribute Owner owner, @Valid @ModelAttribute Pet pet, BindingResult result, Model model) {
+    public String processCreationForm(Owner owner, @Valid Pet pet, BindingResult result, Model model) {
         if (!StringUtils.isEmpty(pet.getName()) && pet.isNew() && owner.getPet(pet.getName(), true) != null) {
             result.rejectValue("name", "duplicate", "already exists");
         }
+        pet.setOwner(owner);
         owner.getPets().add(pet);
         if (result.hasErrors()) {
             model.addAttribute("pet", pet);
@@ -83,6 +84,7 @@ public class PetController {
                                     BindingResult result,
                                     Owner owner,
                                     Model model) {
+
         if(result.hasErrors()) {
             pet.setOwner(owner);
 
