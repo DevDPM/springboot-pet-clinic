@@ -7,19 +7,20 @@
 <body>
 
 <h2>List of Vets</h2>
-<table class="table table-striped">
+<table id="vets" class="table table-striped">
     <thead>
     <tr>
-        <td style="width: 150px">ID</td>
-        <td style="width: 200px">First Name</td>
-        <td style="width: 120px">Last Name</td>
+        <td style="width: 150px">Name</td>
+        <td style="width: 200px">Specialty</td>
     </tr>
     </thead>
     <tbody>
     <tr th:each="vet : ${vets}">
-        <td th:text="${vet.id}"></td>
         <td th:text="${vet.getFirstName()}"></td>
-        <td th:text="${vet.getLastName()}"></td>
+        <td><span th:each="specialty : ${vet.getSpecialties()}"
+                  th:text="${specialty.description + ' '}"/>
+            <span th:if="${vet.specialties.size() == 0}">none</span>
+        </td>
     </tr>
     </tbody>
 </table>
