@@ -7,6 +7,7 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.Set;
 
 @Service
@@ -46,5 +47,17 @@ public class PetJpaService implements PetService {
     @Override
     public void deleteById(Long id) {
         petRepository.deleteById(id);
+    }
+
+    @Override
+    public Pet updatePetById(Long id, Pet petDto) {
+        return petRepository.findById(id).map(updatePet -> {
+            updatePet.setBirthDate(petDto.getBirthDate());
+            updatePet.setVisits(petDto.getVisits());
+            updatePet.setPetType(petDto.getPetType());
+            updatePet.setName(petDto.getName());
+            return updatePet;
+        }).orElse(null);
+
     }
 }

@@ -48,7 +48,9 @@ class PetControllerTest {
     @BeforeEach
     void setUp() {
 
-        owner = Owner.builder().id(1L).build();
+        Set<Pet> pets = new HashSet<>();
+        pets.add(Pet.builder().id(1L).name("test").petType(null).birthDate(null).build());
+        owner = Owner.builder().pets(pets).id(1L).build();
 
         petType = new HashSet<>();
         petType.add(PetType.builder().id(1L).name("Dog").build());
@@ -96,12 +98,14 @@ class PetControllerTest {
     void processUpdateForm() throws Exception {
         when(ownerService.findById(anyLong())).thenReturn(owner);
         when(petTypeService.findAll()).thenReturn(petType);
+        Pet pet = Pet.builder().owner(owner).build();
+        when(petService.findById(anyLong())).thenReturn(pet);
 
-//        mockMvc.perform(MockMvcRequestBuilders.post("/owners/1/pets/1/edit"))
-//                .andExpect(MockMvcResultMatchers.status().is3xxRedirection())
-//                .andExpect(MockMvcResultMatchers.view().name("redirect:/owners/1"));
+        mockMvc.perform(MockMvcRequestBuilders.post("/owners/1/pets/1/edit"))
+                .andExpect(MockMvcResultMatchers.status().is3xxRedirection())
+                .andExpect(MockMvcResultMatchers.view().name("redirect:/owners/1"));
 
-        verify(petService).save(any());
+        verify(petService).updatePetById(anyLong(), any());
     }
 
     @Test

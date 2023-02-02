@@ -93,31 +93,23 @@ public class PetController {
     }
 
     @PostMapping("/pets/{petId}/edit")
-    public String processUpdateForm(@Valid Pet pet,
+    public String processUpdateForm(@PathVariable("petId") Long petId,
+                                    @Valid Pet pet,
                                     BindingResult result,
                                     Owner owner,
                                     Model model) {
 
-        if(result.hasErrors()) {
+        Owner petOwner = petService.findById(petId).getOwner();
+
+        // verify error OR petId -> ownerId == (InitBound) ownerId
+        if(result.hasErrors() || !petOwner.getId().equals(owner.getId())) {
             pet.setOwner(owner);
 
             model.addAttribute("pet", pet);
             return  VIEW_PETS_CREATE_OR_UPDATE;
         } else {
-            List<Pet> ownerPet = owner.getPets().stream()
-                    .filter(e -> e.getId().equals(pet.getId()))
-                    .toList();
 
-            if (ownerPet.isEmpty())
-                throw new RuntimeException("error");
-
-            Pet convertPet = ownerPet.get(0);
-            convertPet.setBirthDate(pet.getBirthDate());
-            convertPet.setVisits(pet.getVisits());
-            convertPet.setPetType(pet.getPetType());
-            convertPet.setName(pet.getName());
-
-            ownerService.save(owner);
+            petService.updatePetById(petId, pet);
             return "redirect:/owners/" + owner.getId();
         }
     }
