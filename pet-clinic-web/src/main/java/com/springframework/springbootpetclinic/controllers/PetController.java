@@ -17,6 +17,8 @@ import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 import org.thymeleaf.util.StringUtils;
 
+import java.beans.PropertyEditorSupport;
+import java.time.LocalDate;
 import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -109,8 +111,23 @@ public class PetController {
             return  VIEW_PETS_CREATE_OR_UPDATE;
         } else {
 
-            petService.updatePetById(petId, pet);
+            Pet petUpdated = petService.updatePetById(petId, pet);
+            petService.save(petUpdated);
+
             return "redirect:/owners/" + owner.getId();
         }
+    }
+
+
+    @InitBinder
+    public void dataBinder(WebDataBinder dataBinder) {
+        dataBinder.setDisallowedFields("id");
+
+        dataBinder.registerCustomEditor(LocalDate.class, new PropertyEditorSupport() {
+            @Override
+            public void setAsText(String text) throws IllegalArgumentException{
+                setValue(LocalDate.parse(text));
+            }
+        });
     }
 }
